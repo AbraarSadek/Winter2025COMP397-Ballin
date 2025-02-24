@@ -5,14 +5,15 @@ namespace Platformer397
     public class GameOver : MonoBehaviour
     {
         public string gameOverSceneName = "DeathScene";
-        public GameObject player;
+        public GameObject Player;
         private Vector3 playerPosition;
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player");
+            Player = GameObject.FindGameObjectWithTag("Player");
 
-            if (player == null)
+            if (Player == null)
             {
                 Debug.LogError("Player not found in the scene. Please add a player to the scene.");
             }
@@ -21,13 +22,13 @@ namespace Platformer397
         // Update is called once per frame
         void Update()
         {
-            if (player != null)
+            if (Player != null)
             {
-                playerPosition = player.transform.position;
+                playerPosition = Player.transform.position;
                 if (playerPosition.y < -10)
                 {
                     LoadDeath();
-                }
+                }  
             }
         }
 
