@@ -30,8 +30,8 @@ public class playerCameraController : MonoBehaviour {
     //Start Method - 
     private void Start() {
         //Lock The Mouse Cursor To The Center of The Game View And Hide It
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.visible = false;
     } //End of Start Method
 
     //Update Method - 

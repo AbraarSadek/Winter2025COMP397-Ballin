@@ -51,10 +51,12 @@ public class playerJumpController : MonoBehaviour {
     } //End of Jump Method
 
     //PreformJump Method
-    public void PreformJump() { Jump(); } //End of PreformJump Method
+    public void PerformJump() { 
+        Jump();
+    } //End of PreformJump Method
 
     //ResetJump Method
-    private void ResetJump() { 
+    private void ResetJump() {
         readyToJump = true; //Set the 'readyToJump' variable to true
     } //End of ResetJump Method
 

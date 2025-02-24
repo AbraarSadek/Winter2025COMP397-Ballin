@@ -123,15 +123,31 @@ public class playerDashController : MonoBehaviour {
     //ResetDash Method
     private void ResetDash() {
 
-        playerMovement.isDashing = false; //Set the 'isDashing' variable to false
-        playerMovement.maxYSpeed = 0; //Set the 'maxYSpeed' variable to zero
+        //playerMovement.isDashing = false; //Set the 'isDashing' variable to false
+        //playerMovement.maxYSpeed = 0; //Set the 'maxYSpeed' variable to zero
 
-        playerCameraController.DoFOV(70); //Call the 'DoFOV' Method
+        //playerCameraController.DoFOV(70); //Call the 'DoFOV' Method
 
-        //If-Statement
-        if (disableGravity) {
-            rb.useGravity = true; //Enable gravity
-        } //End of If-Statement
+        ////If-Statement
+        //if (disableGravity)
+        //{
+        //    rb.useGravity = false; //Enable gravity
+        //} //End of If-Statement
+
+        playerMovement.isDashing = false;
+        playerMovement.maxYSpeed = 0;
+
+        if (disableGravity)
+        {
+            rb.useGravity = true; // Re-enable gravity after dash
+        }
+
+        if (resetVelocity)
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); // Keep Y velocity if jumping
+        }
+
+        playerCameraController.DoFOV(70);
 
     } //End of ResetDash Method
 
