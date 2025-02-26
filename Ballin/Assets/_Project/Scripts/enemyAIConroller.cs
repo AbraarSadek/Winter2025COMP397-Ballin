@@ -9,82 +9,274 @@
  * 
  */
 
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-//enemyAIConroller Class
-public class enemyAIConroller : MonoBehaviour {
+//EnemyAIController Class
+public class EnemyAIController : MonoBehaviour {
 
-    private NavMeshAgent agent; //NavMeshAgent Variable to store the Enemy's NavMeshAgent
-    [SerializeField] private List<Transform> waypoints; //List Variable to store the waypoints for the enemy to move between
-    [SerializeField] private float distanceThreshold = 0.5f; //Float Variable to store the distance threshold for the enemy to move between waypoints
-    private int currentWaypointIndex = 0; //Int Variable to store the current waypoint index
+    //Public Component Reference Variables
+    [Header("Component References: ")]
+    public Transform player; //Transform variable to store the player's transform
+    public NavMeshAgent navMeshAgent; //NavMeshAgent variable to store the AI's NavMeshAgent
+
+    //Public Script References
+    [Header("Script References: ")]
+    public PlayerHealthController PlayerHealthController; //Script Reference to the PlayerHealthController script
 
     //Public Variables
+    [Header("Player Distance Variables: ")]
+    public float distanceFromPlayer; //Float variable to that will store the distance between the enemy and the players
 
-    //Awake Method - Is Called Before The Start Method
-    private void Awake()
-    {
+    //Public Variables
+    [Header("Patrolling & Waypoint Variables: ")]
+    [SerializeField] private List<Transform> waypoints; //List of Transform variables that will store the waypoints
+    [SerializeField] private float waypointArrivalThreshold = 5.2f; //Float variable that will store the threshold for detecting arrival arrival at a waypoint
+    private int currentWaypointIndex = 0;
+    [SerializeField] private float patrolSpeed = 8f;
+    private bool isPatrolling = false;
 
-        agent = GetComponent<NavMeshAgent>(); //Get the 'NavMeshAgent' component attached to the enemy
+    //Private Variables
+    [Header("Enemy Chasing Variables: ")]
+    [SerializeField] private float chaseRange = 20f;
+    [SerializeField] private float chaseSpeed = 10f;
+    [SerializeField] private float stopChaseRange = 25f;
+    private bool isChasing = false;
 
-        //If-Statement - That Will Check If The Waypoints List Is Not Empty
-        if (waypoints.Count > 0)
-        {
-            agent.destination = waypoints[currentWaypointIndex].position; //Set the 'agent.destination' variable to the value of the 'waypoints[currentWaypointIndex].position' variable
+    //Private Variables For Enemy Attacking
+    [Header("Enemy Attacking Variables: ")]
+    [SerializeField] private float attackRange = 15f;
+    [SerializeField] private float attackForce = 10f;
+
+    [SerializeField] private float dashSpeedMultiplier = 2f;
+    [SerializeField] private float dashDuration = 1f;
+
+    [SerializeField] private float stunDuration = 0.5f;
+
+    [SerializeField] private float slowMotionTimeScale = 0.5f;
+    [SerializeField] private float slowMotionDuration = 0.3f;
+    
+    private bool isAttacking = false;
+    private bool isStunned = false;
+
+    //Awake Method - That Will Be Called When Tthe Script Is Loaded
+    private void Awake()  {
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
+
+        PlayerHealthController = player.GetComponent<PlayerHealthController>();
+
+        //If-Statement That Will Check If 
+        if (waypoints.Count > 0) {
+            isPatrolling = true; //Set the 'isPatrolling' variable to true
+            navMeshAgent.destination = waypoints[currentWaypointIndex].position; //Set the NavMeshAgent's destination to the waypoint at the current index in the list
+            navMeshAgent.speed = patrolSpeed; //
         } //End of If-Statement
 
     } //End of Awake Method
 
-    //Update Method - Is Called Once Per Frame
-    private void Update()
-    {
+    //Update Method - 
+    void Update() {
 
-        //If-Statement - That Will Check If The Waypoints List Is Empty
-        if (waypoints.Count == 0 || !agent.isOnNavMesh)
-        {
+        //If-Statement - That Will Check If The Enemy Has No Waypoints, Is Not On The NavMesh, Or Is Stunned
+        if (waypoints.Count == 0 || !navMeshAgent.isOnNavMesh || isStunned) {
             return;
         } //End of If-Statement
 
-        //If-Statement - That Will Check If The 'agent.remainingDistance' variable is less than or equal to the 'distanceThreshold' variable
-        if (!agent.pathPending && agent.remainingDistance <= distanceThreshold)
-        {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;  // Loop to the first waypoint after the last
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-        } //End of If-Statement 
+        distanceFromPlayer = Vector3.Distance(this.transform.position, player.position); //Get and store the distance between the enemy and the player into the 'distanceFromPlayer' variable
+
+        //If-Statement - That Will Check If The Enemy Is Attacking The Player
+        if (isAttacking) { return; } //End of If-Statement
+
+        //If-Else Statement - That Will Check If The Enemy Is Chasing The Player
+        if (isChasing) {
+
+            //Nest Else-If Statement - That Will Check If The Player Position Is Outside of The Stop Chasing Range
+            if (distanceFromPlayer > stopChaseRange) {
+                isChasing = false; //Set the 'isChasing' variable to false
+                navMeshAgent.speed = patrolSpeed; //Set the NavMeshAgent's speed to the value of the 'patrolSpeed' variable
+                MoveEnemyToNextWaypoint(); //Call the 'MoveEnemyToNextWaypoint' method
+            } else if (distanceFromPlayer <= attackRange) /*Check If The Player Position Is Inside of The Attack Range*/ { 
+                StartCoroutine(MakeEnemyAttackPlayer()); //Call the 'MakeEnemyAttackPlayer' method
+            } else {
+                navMeshAgent.SetDestination(player.position); //Set the NavMeshAgent's destination to the player's position
+            } //End of Nest Else-If Statement
+
+        } else {
+
+            //Nested If-Else Statement - That Will Check If The Player Position Is Inside of The Chase Range
+            if (distanceFromPlayer <= chaseRange) {
+                MakeEnemyChasePlayer(); //Call the 'MakeEnemyChasePlayer' method
+            } else {
+                MakeEnemyPatrolWaypoints(); //Call the 'MakeEnemyPatrolWaypoints' method
+            } //End of Nested If-Else Statement
+
+        }//End of If-Else Statement
 
     } //End of Update Method
 
-    //OnDrawGizmos Method - Is Called Before The Start Method
-    private void OnDrawGizmos()
-    {
+    //MakeEnemyPatrolWaypoints Method - That Will Make The Enemy Patrol Waypoints
+    void MakeEnemyPatrolWaypoints() {
 
-        //If-Statement - That Will Check If The Waypoints List Is Empty
-        if (waypoints.Count == 0)
-        {
+        //If-Statement - That Will 
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= waypointArrivalThreshold && navMeshAgent.velocity.sqrMagnitude < 0.1f) {
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; //Increment the current waypoint index
+            Debug.Log($"Moving to waypoint {currentWaypointIndex}: {waypoints[currentWaypointIndex].position}");
+            MoveEnemyToNextWaypoint(); //Call the 'MoveEnemyToNextWaypoint' method
+        } //End of If-Statement
+
+    } //End of MakeEnemyPatrolWaypoints Method
+
+    //MoveToNextWaypoint Method - That Will Move The Enemy To The Next Waypoint In The List
+    private void MoveEnemyToNextWaypoint() {
+
+        //If-Statement - That Will 
+        if (waypoints.Count == 0) {
             return;
         } //End of If-Statement
 
-        Gizmos.color = Color.red; //Set the 'Gizmos.color' variable to red
+        navMeshAgent.SetDestination(waypoints[currentWaypointIndex].position); //Set the NavMeshAgent's destination to the waypoint at the current index in the list
+        navMeshAgent.isStopped = false; // Ensure the agent is not stopped
 
-        //For-Loop -  That Will Loop Through The 'waypoints' List
-        for (int i = 0; i < waypoints.Count; i++)
-        {
-            Gizmos.DrawSphere(waypoints[i].position, 0.2f); //Draw a sphere at the 'waypoints[i].position' with a radius of 0.32
-            //Nested If-Statement - That Will Check If The 'i' variable is greater than 0
-            if (i > 0)
-            {
-                Gizmos.DrawLine(waypoints[i - 1].position, waypoints[i].position); //Draw a line between the 'waypoints[i - 1].position' and the 'waypoints[i].position'
-            } //End of Nested If-Statement
-        } //End of For-Loop
+    } //End of MoveToNextWaypoint Method
+
+    //MakeEnemyChasePlayer Method - That Will Make The Enemy Chase The Player When They Get Close
+    void MakeEnemyChasePlayer() {
+        isChasing = true; //Set the 'isChasing' variable to true
+        navMeshAgent.speed = chaseSpeed; //Set the NavMeshAgent's speed to the value of the 'chaseSpeed' variable
+    } //End of MakeEnemyChasePlayer Method
+
+    //MakeEnemyAttackPlayer Method - That Will Make The Enemy Attack The Player When They Get Close
+    private IEnumerator MakeEnemyAttackPlayer() {
+
+        //If-Statement - That Will 
+        if (isAttacking || isStunned) {
+            yield break;
+        } //End of If-Statement
+
+        isAttacking = true; //Set the 'isAttacking' variable to true
+        navMeshAgent.isStopped = true; //Stop the NavMeshAgent from moving
+
+        //Set the NavMeshAgent's velocity to the direction of the player
+        Vector3 attackDirection = (player.position - transform.position).normalized; //Vector3 variable that will get the direction of the player from the enemy
+
+        //Temporarily Increase The Enemys Speed While Preforming Attack/Tackle
+        float enemyOriginalSpeed = navMeshAgent.speed;
+        navMeshAgent.speed *= dashSpeedMultiplier;
+
+        //Set The Nav Mesh Agent Destination To The Players Position
+        navMeshAgent.SetDestination(player.position);
+
+        yield return new WaitForSeconds(dashDuration);
+
+        //Reset The Enemys Speed And Stun
+        navMeshAgent.speed = enemyOriginalSpeed;
+        navMeshAgent.isStopped = true;
+
+        //End The Enemys Attack
+        yield return new WaitForSeconds(0.5f); //Wait for 0.5 seconds before continuing
+        isAttacking = false; //Set the 'isAttacking' variable to false
+        StartCoroutine(StunEnemyAfterAttack()); //Call the 'StunEnemy' method
+
+    } //End of MakeEnemyAttackPlayer Method
+
+    //StunEnemyAfterAttack Method - That Will 'Stun' The Enemy After Attacking The Player So The Player Has Time To Get Away
+    private IEnumerator StunEnemyAfterAttack() {
+
+        navMeshAgent.stoppingDistance = 0.2f; //Set the 'navMeshAgent's' 'stoppingDistance' to 0.2f
+        isStunned = true; //Set the 'isStunned' variable to true
+        navMeshAgent.isStopped = true; //Stop the NavMeshAgent from moving
+
+        yield return new WaitForSeconds(stunDuration); //Wait for the stun duration
+
+        navMeshAgent.stoppingDistance = 5f; //Set the 'navMeshAgent's' 'stoppingDistance' to 5f
+        navMeshAgent.isStopped = false; //Resume the NavMeshAgent's movement
+        isStunned = false; //Set the 'isStunned' variable to false
+
+    } //End of StunEnemyAfterAttack Method
+
+    //OnTriggerEnter Method - Will Handle The Enemys Collision-based Attack Detection
+    private void OnTriggerEnter(Collider other) {
+
+        //If-Statement - That Will Check If The Enemey Is Attacking
+        if (!isAttacking) { return; }
+
+        //If-Statement - That Will Check If The Object The Enemy Colided With Has The "Player" Tag
+        if (other.CompareTag("Player")) {
+
+            PlayerHealthController.DamageTaked(1); //Call the 'DamageTaked' method from the 'PlayerHealthController' script and pass it the value of 1
+
+            StartCoroutine(KnockbackPlayer(other.transform)); //Call the '' method
+
+            StartCoroutine(SlowMotionEffect()); //Call the 'SlowMotionEffect' method
+
+        } //End of If-Statement 
+
+    } //End of OnTriggerEnter Method
+
+    //StartCoroutine Method - That Will Knock The Player Back When They Are Damaged
+    private IEnumerator KnockbackPlayer(Transform playerTransform) {
+
+        //Calculate The Knock Back Force
+        Vector3 knockbackDirection = (playerTransform.position - transform.position).normalized; //Calculate the direction of the knockback 
+        knockbackDirection += Vector3.up * 0.5f; //Add an upward force to the knockback
+        knockbackDirection += Vector3.down * 0.5f; //Add an upward force to the knockback
+        knockbackDirection.Normalize(); //Normalize 'knockbackDirection' variable once more to maintain consistent force
+
+        Vector3 targetPosition = playerTransform.position + (knockbackDirection * (attackForce * 2)); //Calculate the end point of the knockback
+
+        float elapsedTime = 0f; //Float variable that will hold how much time has passed
+        float knockbackDuration = 1; //Float variable that will hold the duration of the knockback
+
+        //While Loop - That Will Run As Long As The Value of The 'elapsedTime' Variable Is Less Then The Value of The 'knockbackDuration' Variable
+        while (elapsedTime < knockbackDuration) {
+
+            playerTransform.position = Vector3.Lerp(playerTransform.position, targetPosition, elapsedTime / knockbackDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+
+        } //End of While Loop
+
+        playerTransform.position = targetPosition;
+
+    } //End of KnockbackPlayer Method
+
+    //SlowMotionEffect Method - That Will Apply A Slow Motion Effect After The Player Lands From The Knockback
+    private IEnumerator SlowMotionEffect() {
+
+        Time.timeScale = slowMotionTimeScale;
+        yield return new WaitForSecondsRealtime(slowMotionDuration);
+        Time.timeScale = 1f;
+
+    } //End of SlowMotionEffect Method
+
+    //OnDrawGizmos Method - That Will Draw Gizmos In The Scene
+    private void OnDrawGizmosSelected() {
+
+        //If-Statement - That Will Check 
+        if (player != null) {
+
+            //Draw A Green Sphere At The Enemy's Position With A Radius Of The 'chaseRange' Variable
+            Gizmos.color = Color.green; //Set the Gizmo's color to green
+            Gizmos.DrawWireSphere(transform.position, chaseRange); //Draw a green sphere at the enemy's position with a radius of the 'chaseRange' variable
+
+            //Draw A Yellow Sphere At The Enemy's Position With A Radius Of The 'stopChaseRange' Variable
+            Gizmos.color = Color.yellow; //Set the Gizmo's color to yellow
+            Gizmos.DrawWireSphere(transform.position, stopChaseRange); //Draw a yellow sphere at the enemy's position with a radius of the 'stopChaseRange' variable
+
+            //Draw A Red Sphere At The Enemy's Position With A Radius Of The 'attackRange' Variable
+            Gizmos.color = Color.red; //Set the Gizmo's color to red
+            Gizmos.DrawWireSphere(transform.position, attackRange); //Draw a red sphere at the enemy's position with a radius of the 'attackRange' variable
+
+        } //End of If-Statement
 
     } //End of OnDrawGizmos Method
 
-} //End of enemyAIConroller Class
+} //End of EnemyAIController Class
+
 
 /*
  * 
@@ -605,4 +797,128 @@ public class enemyAIConroller : MonoBehaviour {
         } //End of For Loop
 
     } //End of EnvironmentView Method
+ */
+
+/*
+ * using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.AI;
+
+//enemyAIConroller Class
+public class enemyAIConroller : MonoBehaviour {
+
+    private NavMeshAgent agent; //NavMeshAgent Variable to store the Enemy's NavMeshAgent
+
+    //Variables For Moving Between Waypoints
+    [SerializeField] private List<Transform> waypoints; //List Variable to store the waypoints for the enemy to move between
+    [SerializeField] private float distanceThreshold = 0.5f; //Float Variable to store the distance threshold for the enemy to move between waypoints
+    private int currentWaypointIndex = 0; //Int Variable to store the current waypoint index
+
+    //Variables For Chasing The Player
+    [SerializeField] private Transform player; //Transform Variable to store the player's transform
+    [SerializeField] private float startChaseRange = 5f; //Float Variable to store the range at which the enemy will start to chase the player
+    [SerializeField] private float chaseSpeed = 2f; //Float Variable to store the speed at which the enemy will chase the player
+    [SerializeField] private bool isChasing = false; //Bool Variable to store if the enemy is currently chasing the player
+    [SerializeField] private float stopChaseRange = 10f; //Float Variable to store the range at which the enemy will stop chasing the player
+
+
+    //Awake Method - Is Called Before The Start Method
+    private void Awake() {
+
+        agent = GetComponent<NavMeshAgent>(); //Get the 'NavMeshAgent' component attached to the enemy
+
+        //If-Statement - That Will Check If The Waypoints List Is Not Empty
+        if (waypoints.Count > 0) {
+            agent.destination = waypoints[currentWaypointIndex].position; //Set the 'agent.destination' variable to the value of the 'waypoints[currentWaypointIndex].position' variable
+        } //End of If-Statement
+
+    } //End of Awake Method
+
+    //Update Method - Is Called Once Per Frame
+    private void Update() {
+
+        //If-Statement - That Will Check If The Waypoints List Is Empty
+        if (waypoints.Count == 0 || !agent.isOnNavMesh) {
+            return;
+        } //End of If-Statement
+
+        float playerDistance = Vector3.Distance(transform.position, player.position); //Float variable to store the distance between the enemy and the player
+
+        //If-Statement - That Will 
+        if (isChasing) {
+
+            //Nested If-Else Statemnt - That Will
+            if (playerDistance > stopChaseRange)
+            {
+                isChasing = false; //Set the 'isChasing' variable to false
+                MoveToNextWaypoint();
+            } else {
+                agent.SetDestination(player.position); //Set the 'agent.destination' variable to the value of the 'player.position' variable
+            }
+
+        } else
+        {
+            Patrol(); //Call the 'Patrol' Method
+        }
+
+
+
+    } //End of Update Method
+
+    //Patrol Method - That Will Make The Enemy Patrol The Waypoints
+    private void Patrol() {
+
+        if (waypoints.Count == 0 || !agent.isOnNavMesh) {
+            return;
+        }
+
+        //If-Statement - That Will Check If The 'agent.remainingDistance' variable is less than or equal to the 'distanceThreshold' variable
+        if (!agent.pathPending && agent.remainingDistance <= distanceThreshold)
+        {
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;  // Loop to the first waypoint after the last
+            MoveToNextWaypoint(); //Call the 'MoveToNextWaypoint' MethodWaypoint
+        } //End of If-Statement 
+
+    } //End of Patrol Method
+
+    //MoveToNextWaypoint Method - That Will
+    private void MoveToNextWaypoint() {
+        agent.SetDestination(waypoints[currentWaypointIndex].position);
+    } //End of MoveToNextWaypoint Method
+
+    //OnDrawGizmos Method - Is Called Before The Start Method
+    private void OnDrawGizmos()
+    {
+
+        //If-Statement - That Will Check If The Waypoints List Is Empty
+        if (waypoints.Count == 0)
+        {
+            return;
+        } //End of If-Statement
+
+        Gizmos.color = Color.red; //Set the 'Gizmos.color' variable to red
+
+        //For-Loop -  That Will Loop Through The 'waypoints' List
+        for (int i = 0; i < waypoints.Count; i++) {
+            Gizmos.DrawSphere(waypoints[i].position, 0.2f); //Draw a sphere at the 'waypoints[i].position' with a radius of 0.32
+            //Nested If-Statement - That Will Check If The 'i' variable is greater than 0
+            if (i > 0) {
+                Gizmos.DrawLine(waypoints[i - 1].position, waypoints[i].position); //Draw a line between the 'waypoints[i - 1].position' and the 'waypoints[i].position'
+            } //End of Nested If-Statement
+        } //End of For-Loop
+
+        //If-Statement - That Will Check 
+        if (player != null) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, startChaseRange); // Chase range
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, stopChaseRange); // Return-to-patrol range
+        }
+
+    } //End of OnDrawGizmos Method
+
+} //End of enemyAIConroller Class
  */

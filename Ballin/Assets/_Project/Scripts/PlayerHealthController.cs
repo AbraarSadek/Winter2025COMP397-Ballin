@@ -21,7 +21,9 @@ public class PlayerHealthController : MonoBehaviour {
 
     //Getters & Setters
     public bool GetIsDead { get { return isDead; } }
+    private bool SetIsDead { set { isDead = value; } }
     public int GetRemainingHealthBars { get { return remainingHealthBars; } }
+    public int SetRemainingHealthBars { set { remainingHealthBars = value; } }
 
     //Start Method - Is Called Once Before The First Execution of Update Method
     void Start() {

@@ -319,6 +319,194 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138933686}
   m_CullTransparentMesh: 1
+--- !u!1 &155985639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 155985645}
+  - component: {fileID: 155985644}
+  - component: {fileID: 155985643}
+  - component: {fileID: 155985642}
+  - component: {fileID: 155985641}
+  - component: {fileID: 155985646}
+  - component: {fileID: 155985640}
+  m_Layer: 0
+  m_Name: Enemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &155985640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08ed47638686ba14e8d7d1a5d5f423d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1523546482}
+  navMeshAgent: {fileID: 155985646}
+  PlayerHealthController: {fileID: 1523546485}
+  distanceFromPlayer: 0
+  waypoints:
+  - {fileID: 1154812483}
+  - {fileID: 1439425073}
+  - {fileID: 1292195230}
+  - {fileID: 5903358}
+  waypointArrivalThreshold: 5.2
+  patrolSpeed: 8
+  chaseRange: 12
+  chaseSpeed: 10
+  stopChaseRange: 18
+  attackRange: 5
+  attackForce: 5
+  dashSpeedMultiplier: 2
+  dashDuration: 0.5
+  stunDuration: 2
+  slowMotionTimeScale: 0.5
+  slowMotionDuration: 0.3
+--- !u!95 &155985641
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90aa194b344d74e4aad5df7152468ed7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &155985642
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &155985643
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: aad30a3493d9309448801cbc0c1f1659, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &155985644
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &155985645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 39.72744, y: 1.3187656, z: 0.41953182}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &155985646
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155985639}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &211267340
 GameObject:
   m_ObjectHideFlags: 0
@@ -3657,7 +3845,7 @@ MonoBehaviour:
   mouseSmoothTime: 0.03
   isCursorLocked: 1
   mouseSensitivity: 2
-  walkSpeed: 15
+  walkSpeed: 20
   moveSmoothTime: 0.03
   gravity: -10
   groundCheck: {fileID: 783774078}
@@ -3665,8 +3853,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   jumpHeight: 10
-  dashSpeed: 45
-  dashDuration: 0.5
+  dashSpeed: 30
+  dashDuration: 1
   dashTime: 1
   isDashing: 0
 --- !u!114 &1523546485
@@ -4755,7 +4943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &2005477804
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4800,7 +4988,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: aad30a3493d9309448801cbc0c1f1659, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4879,12 +5067,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ed47638686ba14e8d7d1a5d5f423d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoints:
-  - {fileID: 1154812483}
-  - {fileID: 1439425073}
-  - {fileID: 1292195230}
-  - {fileID: 5903358}
-  distanceThreshold: 0.5
+  player: {fileID: 0}
+  navMeshAgent: {fileID: 0}
+  PlayerHealthController: {fileID: 0}
+  distanceFromPlayer: 0
+  waypoints: []
+  waypointArrivalThreshold: 0.5
+  patrolSpeed: 2
+  chaseRange: 5
+  chaseSpeed: 3.5
+  stopChaseRange: 7
+  attackRange: 1.5
+  attackForce: 5
+  dashSpeedMultiplier: 2
+  dashDuration: 0.5
+  stunDuration: 2
+  slowMotionTimeScale: 0.5
+  slowMotionDuration: 0.3
 --- !u!54 &2005477810
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5116,3 +5315,4 @@ SceneRoots:
   - {fileID: 1704849055}
   - {fileID: 1271670212}
   - {fileID: 1523546482}
+  - {fileID: 155985645}
