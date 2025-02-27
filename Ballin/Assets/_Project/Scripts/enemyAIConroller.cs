@@ -1,6 +1,6 @@
 /*
  * 
- * Script Name: enemyAIConroller
+ * Script Name: EnemyAIConroller
  * Created By: Abraar Sadek
  * Date Created: 02/20/2025
  * Last Modified: 02/23/2025
