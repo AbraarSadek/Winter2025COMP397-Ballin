@@ -2,18 +2,24 @@ using UnityEngine;
 
 namespace Platformer397
 {
-    public class GameOver : MonoBehaviour
-    {
+    public class GameOver : MonoBehaviour {
+
+        [SerializeField]
         public string gameOverSceneName = "DeathScene";
-        public GameObject Player;
+
+        public Transform player;
+
         private Vector3 playerPosition;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            Player = GameObject.FindGameObjectWithTag("Player");
+        //Reference To 'PlayerHealthController' Script
+        public PlayerHealthController playerHealthController;
 
-            if (Player == null)
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start() {
+
+            //playerHealthController = GetComponent<PlayerHealthController>();
+
+            if (player == null)
             {
                 Debug.LogError("Player not found in the scene. Please add a player to the scene.");
             }
@@ -22,13 +28,14 @@ namespace Platformer397
         // Update is called once per frame
         void Update()
         {
-            if (Player != null)
+            if (player != null)
             {
-                playerPosition = Player.transform.position;
-                if (playerPosition.y < -10)
+                playerPosition = player.transform.position;
+                
+                if (playerPosition.y < -10 || playerHealthController.isDead == true)
                 {
                     LoadDeath();
-                }  
+                } 
             }
         }
 
