@@ -10,6 +10,8 @@
  */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 //CoinCollectionController Class
@@ -17,6 +19,9 @@ public class CoinCollectionController : MonoBehaviour {
 
     //Priavte Variables
     private int coinsCollected = 0; //Int variable that will hold the number of coins collected by the player
+
+    [SerializeField] private FloatSO score;
+    [SerializeField] private FloatSO coinCount;
 
     [SerializeField] private bool hasCollectedGoldCoin = false; //Bool variable that will hold if the player has collected the gold coin
     [SerializeField] private bool hasCollectedSilverCoin = false; //Bool variable that will hold if the player has collected the silver coin
@@ -32,8 +37,10 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsGoldCoin'
         if (other.CompareTag("whatIsGoldCoin")) {
 
+            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedGoldCoin = true; //Set the 'hasCollectedGoldCoin' variable to true
+            score.Value += 1000;
             Debug.Log("Player Has Collected The Gold Coin!");
             Debug.Log("Coins Collected: " + coinsCollected);
             Destroy(other.gameObject); //Destroy the object that the player has collided with
@@ -48,8 +55,10 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsSilverCoin'
         if (other.CompareTag("whatIsSilverCoin")) {
 
+            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedSilverCoin = true; //Set the 'hasCollectedSilverCoin' variable to true
+            score.Value += 500;
             Debug.Log("Player Has Collected The Silver Coin!");
             Debug.Log("Coins Collected: " + coinsCollected);
             Destroy(other.gameObject); //Destroy the object that the player has collided with
@@ -64,8 +73,10 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsBronzeCoin'
         if (other.CompareTag("whatIsBronzeCoin")) {
 
+            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedBronzeCoin = true; //Set the 'hasCollectedBronzeCoin' variable to true
+            score.Value += 100;
             Debug.Log("Player Has Collected The Bronze Coin!");
             Debug.Log("Coins Collected: " + coinsCollected);
             Destroy(other.gameObject); //Destroy the object that the player has collided with
@@ -78,5 +89,23 @@ public class CoinCollectionController : MonoBehaviour {
         } //End of If-Statement
 
     } //End of OnTriggerEnter Method
+
+    //Updates to check if all 3 coints are collected to move into the WinScene
+    private void Update()
+    {
+        if (coinsCollected == 3)
+        {
+            SceneManager.LoadScene("WinScene");
+            Debug.Log("You win");
+
+        }
+        
+    }
+
+    private void Start()
+    {
+        score.Value = 0;
+        coinCount.Value = 0;
+    }
 
 } //End of CoinCollectionController Class

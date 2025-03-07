@@ -15,6 +15,7 @@ using UnityEngine;
 public class PlayerHealthController : MonoBehaviour {
 
     //Pulic Variables
+    [SerializeField] private FloatSO score;
     public GameObject[] healthBars; //Game Object array variables that will hold the players health bars
     public bool isDead; //Bool variable that will hold if the player is dead or not
     public int remainingHealthBars; //Int variable that will hold the players remaining health bars
@@ -60,6 +61,17 @@ public class PlayerHealthController : MonoBehaviour {
         if (remainingHealthBars < 1) {
             isDead = true; //Set the 'isDead' variable to true
         } //End of If-Statement
+
+        if (remainingHealthBars < 3)
+        {
+            score.Value -= 200;
+            Debug.Log("I lost 200 points");
+        }
+        else if (remainingHealthBars < 2)
+        {
+            score.Value -= 500;
+            Debug.Log("I lost 500 points");
+        }
 
     } //End of DamageTaked Method
 
