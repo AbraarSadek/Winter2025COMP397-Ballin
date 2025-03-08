@@ -9,6 +9,7 @@
  * 
  */
 
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
@@ -18,10 +19,11 @@ using UnityEngine.UI;
 public class CoinCollectionController : MonoBehaviour {
 
     //Priavte Variables
+    private bool hasStar = false;
     private int coinsCollected = 0; //Int variable that will hold the number of coins collected by the player
 
     [SerializeField] private FloatSO score;
-    [SerializeField] private FloatSO coinCount;
+    [SerializeField] private FloatSO star;
 
     [SerializeField] private bool hasCollectedGoldCoin = false; //Bool variable that will hold if the player has collected the gold coin
     [SerializeField] private bool hasCollectedSilverCoin = false; //Bool variable that will hold if the player has collected the silver coin
@@ -90,18 +92,22 @@ public class CoinCollectionController : MonoBehaviour {
     //Updates to check if all 3 coints are collected to move into the WinScene
     private void Update()
     {
-        if (coinsCollected == 3)
+        
+        if (coinsCollected == 3 && !hasStar)
         {
-            coinCount.Value++;
+            star.Value++;
+            hasStar = true;
             Debug.Log("Star Collected");
+            
         }
+    
         
     }
 
     private void Start()
     {
         score.Value = 0;
-        coinCount.Value = 0;
+        star.Value = 0;
     }
 
 } //End of CoinCollectionController Class

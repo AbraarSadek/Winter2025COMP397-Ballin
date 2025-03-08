@@ -738,6 +738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277b502c148bbbe439c34f375ae38d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  star: {fileID: 11400000, guid: 74e45948d3a523548b635481b6d439df, type: 2}
   timerText: {fileID: 285235878}
   timeRemaining: 90
   timerIsRunning: 0
@@ -3851,7 +3852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: {fileID: 11400000, guid: f407bbb50a6f1244baaf98fe43b0c1af, type: 2}
-  coinsCollected: {fileID: 11400000, guid: 74e45948d3a523548b635481b6d439df, type: 2}
+  star: {fileID: 11400000, guid: 74e45948d3a523548b635481b6d439df, type: 2}
   healthBars:
   - {fileID: 190047676}
   - {fileID: 412442959}
@@ -3871,7 +3872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: {fileID: 11400000, guid: f407bbb50a6f1244baaf98fe43b0c1af, type: 2}
-  coinCount: {fileID: 11400000, guid: 74e45948d3a523548b635481b6d439df, type: 2}
+  star: {fileID: 11400000, guid: 74e45948d3a523548b635481b6d439df, type: 2}
   hasCollectedGoldCoin: 0
   hasCollectedSilverCoin: 0
   hasCollectedBronzeCoin: 0

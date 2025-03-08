@@ -17,9 +17,14 @@ using TMPro;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
+using Unity.Mathematics;
 
 //TimerController Class
 public class TimerController : MonoBehaviour {
+
+    [SerializeField] private FloatSO star;
+    private bool hasTime = false;
+    private bool noTime = false;
 
     //Public Component Reference Variables
     [Header("Component References: ")]
@@ -64,6 +69,22 @@ public class TimerController : MonoBehaviour {
             }//End of Nested If-Else Statement
 
         } //End of If-Statement
+
+
+        if (timeRemaining >= 60 && !hasTime)
+        {
+            star.Value++;
+            hasTime = true;
+            Debug.Log("Star Collected");
+
+        }
+        else if (timeRemaining < 60 && !noTime)
+        {
+            star.Value--;
+            noTime = true;
+            hasTime = false;
+            Debug.Log("No star");
+        }
 
     } //End of Update Method
 

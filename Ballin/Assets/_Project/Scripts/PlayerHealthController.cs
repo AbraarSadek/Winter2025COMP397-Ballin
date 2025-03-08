@@ -9,14 +9,17 @@
  * 
  */
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 //PlayerHealthController Class
 public class PlayerHealthController : MonoBehaviour {
 
+    private bool hasHearts = false;
+    private bool noHearts = false;
     //Pulic Variables
     [SerializeField] private FloatSO score;
-    [SerializeField] private FloatSO coinsCollected;
+    [SerializeField] private FloatSO star;
     public GameObject[] healthBars; //Game Object array variables that will hold the players health bars
     public bool isDead; //Bool variable that will hold if the player is dead or not
     public int remainingHealthBars; //Int variable that will hold the players remaining health bars
@@ -45,6 +48,22 @@ public class PlayerHealthController : MonoBehaviour {
             Debug.Log("Player Is Dead!!!"); //Temporarly death message
 
         } //End of If-Statement
+
+
+        if (remainingHealthBars == 3 && !hasHearts)
+        {
+            star.Value++;
+            hasHearts = true;
+            Debug.Log("Star Collected");
+
+        }
+        else if(remainingHealthBars == 2 && !noHearts)
+        {
+            star.Value--;
+            noHearts = true;
+            hasHearts = false;
+            Debug.Log("No Stars");
+        }
 
     } //End of Update Method
 
