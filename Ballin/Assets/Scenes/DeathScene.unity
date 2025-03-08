@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1253504624}
         m_TargetAssemblyTypeName: Platformer397.DeathSceneManager, Assembly-CSharp
         m_MethodName: Retry
         m_Mode: 1

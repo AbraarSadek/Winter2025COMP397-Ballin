@@ -37,7 +37,6 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsGoldCoin'
         if (other.CompareTag("whatIsGoldCoin")) {
 
-            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedGoldCoin = true; //Set the 'hasCollectedGoldCoin' variable to true
             score.Value += 1000;
@@ -55,7 +54,6 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsSilverCoin'
         if (other.CompareTag("whatIsSilverCoin")) {
 
-            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedSilverCoin = true; //Set the 'hasCollectedSilverCoin' variable to true
             score.Value += 500;
@@ -73,7 +71,6 @@ public class CoinCollectionController : MonoBehaviour {
         //If-Statement - That Will Check If The Player Has Collided With An Object That Is Tagged 'whatIsBronzeCoin'
         if (other.CompareTag("whatIsBronzeCoin")) {
 
-            coinCount.Value++;
             coinsCollected++; //Increment the 'coinsCollected' variable by 1
             hasCollectedBronzeCoin = true; //Set the 'hasCollectedBronzeCoin' variable to true
             score.Value += 100;
@@ -95,9 +92,8 @@ public class CoinCollectionController : MonoBehaviour {
     {
         if (coinsCollected == 3)
         {
-            SceneManager.LoadScene("WinScene");
-            Debug.Log("You win");
-
+            coinCount.Value++;
+            Debug.Log("Star Collected");
         }
         
     }

@@ -16,6 +16,7 @@ public class PlayerHealthController : MonoBehaviour {
 
     //Pulic Variables
     [SerializeField] private FloatSO score;
+    [SerializeField] private FloatSO coinsCollected;
     public GameObject[] healthBars; //Game Object array variables that will hold the players health bars
     public bool isDead; //Bool variable that will hold if the player is dead or not
     public int remainingHealthBars; //Int variable that will hold the players remaining health bars
@@ -72,6 +73,7 @@ public class PlayerHealthController : MonoBehaviour {
             score.Value -= 500;
             Debug.Log("I lost 500 points");
         }
+
 
     } //End of DamageTaked Method
 
