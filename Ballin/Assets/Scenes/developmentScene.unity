@@ -744,6 +744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277b502c148bbbe439c34f375ae38d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  star: {fileID: 0}
   timerText: {fileID: 319579091}
   timeRemaining: 90
   timerIsRunning: 0
@@ -2197,6 +2198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b997d673713b6b4e8227e90c07db5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 0}
+  star: {fileID: 0}
   hasCollectedGoldCoin: 0
   hasCollectedSilverCoin: 0
   hasCollectedBronzeCoin: 0
@@ -2215,6 +2218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a6cf63b7e572640bf3f6f45606f386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 0}
+  star: {fileID: 0}
   healthBars:
   - {fileID: 1860881310}
   - {fileID: 389277850}
@@ -3579,7 +3584,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverSceneName: DeathScene
-  Player: {fileID: 1523546478}
+  player: {fileID: 1523546482}
+  playerHealthController: {fileID: 1523546485}
+  timerController: {fileID: 319579090}
 --- !u!4 &1369255972
 Transform:
   m_ObjectHideFlags: 0
@@ -3913,6 +3920,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a6cf63b7e572640bf3f6f45606f386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 0}
+  star: {fileID: 0}
   healthBars:
   - {fileID: 1860881310}
   - {fileID: 389277850}
@@ -3931,6 +3940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b997d673713b6b4e8227e90c07db5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 0}
+  star: {fileID: 0}
   hasCollectedGoldCoin: 0
   hasCollectedSilverCoin: 0
   hasCollectedBronzeCoin: 0

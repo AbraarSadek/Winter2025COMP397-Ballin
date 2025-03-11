@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Platformer397
@@ -13,6 +14,7 @@ namespace Platformer397
 
         //Reference To 'PlayerHealthController' Script
         public PlayerHealthController playerHealthController;
+        public TimerController timerController;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start() {
@@ -36,6 +38,11 @@ namespace Platformer397
                 {
                     LoadDeath();
                 } 
+                if (timerController.timeRemaining <= 0)
+                {
+                    Debug.Log("death from timer");
+                    LoadDeath();
+                }
             }
         }
 
