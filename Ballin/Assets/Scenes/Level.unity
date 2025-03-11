@@ -6150,6 +6150,7 @@ MonoBehaviour:
   gameOverSceneName: DeathScene
   player: {fileID: 1307947374}
   playerHealthController: {fileID: 1307947367}
+  timerController: {fileID: 285235877}
 --- !u!4 &1867935481
 Transform:
   m_ObjectHideFlags: 0
