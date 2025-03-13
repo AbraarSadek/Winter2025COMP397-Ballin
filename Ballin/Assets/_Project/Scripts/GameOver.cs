@@ -1,16 +1,25 @@
+using System;
 using UnityEngine;
 
 namespace Platformer397
 {
-    public class GameOver : MonoBehaviour
-    {
+    public class GameOver : MonoBehaviour {
+
+        [SerializeField]
         public string gameOverSceneName = "DeathScene";
-        public GameObject player;
+
+        public Transform player;
+
         private Vector3 playerPosition;
+
+        //Reference To 'PlayerHealthController' Script
+        public PlayerHealthController playerHealthController;
+        public TimerController timerController;
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
+        void Start() {
+
+            //playerHealthController = GetComponent<PlayerHealthController>();
 
             if (player == null)
             {
@@ -24,8 +33,14 @@ namespace Platformer397
             if (player != null)
             {
                 playerPosition = player.transform.position;
-                if (playerPosition.y < -10)
+                
+                if (playerPosition.y < -10 || playerHealthController.isDead == true)
                 {
+                    LoadDeath();
+                } 
+                if (timerController.timeRemaining <= 0)
+                {
+                    Debug.Log("death from timer");
                     LoadDeath();
                 }
             }

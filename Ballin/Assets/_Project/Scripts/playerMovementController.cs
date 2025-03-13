@@ -97,7 +97,7 @@ public class playerMovementController : MonoBehaviour {
         //If- Statement - That Will Make The Player Jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && playerJump.GetReadyToJump == true) {
             playerJump.SetReadyToJump(false); //Set the 'readyToJump' variable to false
-            playerJump.PreformJump(); //Call the 'PreformJump' Method
+            playerJump.PerformJump(); //Call the 'PreformJump' Method
             //Invoke(nameof(playerJump.CallResetJump), playerJump.GetJumpCoooldown); //Invoke the 'ResetJump' Method
             playerJump.CallResetJump();
         } //End of If-Statement
@@ -150,7 +150,7 @@ public class playerMovementController : MonoBehaviour {
         if (isDashing) {
             state = MovementState.Dashing; //Set the 'state' variable to 'walking'
             desiredMoveSpeed = dashingSpeed; //Set the 'movementSpeed' variable to the value of the 'walkingSpeed' variable
-            speedChangeFactor= dashingSpeedChangeFactor; //Set the 'speedChangeFactor' variable to the value of the dashingSpeedChangeFactor
+            speedChangeFactor = dashingSpeedChangeFactor; //Set the 'speedChangeFactor' variable to the value of the dashingSpeedChangeFactor
         }
         else if (isGrounded) {
             state = MovementState.Walking; //Set the 'state' variable to 'dashing'
@@ -192,7 +192,6 @@ public class playerMovementController : MonoBehaviour {
         lastState = state; //Set the 'lastState' variable to the value of the 'state' variable
 
     } //End of PlayerStateHandeler Method
-
 
     //Private Variable
     private float speedChangeFactor;

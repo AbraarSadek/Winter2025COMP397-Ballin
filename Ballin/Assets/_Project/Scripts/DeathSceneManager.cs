@@ -14,7 +14,7 @@ namespace Platformer397
             }
             else
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(4);
             }
         }
 
