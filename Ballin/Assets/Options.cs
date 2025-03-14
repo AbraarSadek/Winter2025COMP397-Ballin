@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Options : MonoBehaviour
 {
@@ -21,5 +22,11 @@ public class Options : MonoBehaviour
     {
         mainOptionsPanel.SetActive(false);
         keybindsPanel.SetActive(true);
+    }
+
+    //Back To Settings
+    public void Settings()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
