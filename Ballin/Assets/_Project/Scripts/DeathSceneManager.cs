@@ -14,14 +14,14 @@ namespace Platformer397
             }
             else
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(4);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Level");
             }
         }
 
-        // Update is called once per frame
-        void Update()
+        public void BaskToMainMenu()
         {
-        
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
+
     }
 }

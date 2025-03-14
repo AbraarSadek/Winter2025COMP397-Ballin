@@ -38,5 +38,10 @@ namespace Platformer397
             PauseMenu.SetActive(false);
             Time.timeScale = 1;
         }
+
+        public void BaskToMainMenu() {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
+
     }
 }

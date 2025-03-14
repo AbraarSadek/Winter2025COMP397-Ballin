@@ -16,7 +16,9 @@ using UnityEngine.UI;
 using TMPro;
 using NUnit.Framework;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditor.Experimental.GraphView;
+#endif
 using Unity.Mathematics;
 using Platformer397;
 
